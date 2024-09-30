@@ -1,0 +1,34 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Order {
+  order_id      Int       @id @default(autoincrement()) @map("order_id")
+  order_uuid    String    @unique @default(uuid()) 
+  customerName  String
+  orderId       String
+  date          DateTime  
+  product       String
+  price         Float
+  transactions  Transaction[]  
+}
+
+model Transaction {
+  transaction_id    Int       @id @default(autoincrement()) @map("transaction_id")
+  transaction_uuid  String    @unique @default(uuid()) 
+  customerName      String
+  orderId           String    
+  order_id          Int
+  date              DateTime  
+  product           String
+  price             Float
+  transactionType   String
+  transactionDate   DateTime  
+  transactionAmount Float
+  order             Order     @relation(fields: [order_id], references: [order_id])
+}
