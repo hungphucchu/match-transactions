@@ -1,5 +1,12 @@
-import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
+import React from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Typography,
+} from "@mui/material";
 
 interface ApproveDialogProps {
   open: boolean;
@@ -7,7 +14,11 @@ interface ApproveDialogProps {
   onApprove: () => void;
 }
 
-const ApproveDialog: React.FC<ApproveDialogProps> = ({ open, onClose, onApprove }) => {
+const ApproveDialog: React.FC<ApproveDialogProps> = ({
+  open,
+  onClose,
+  onApprove,
+}) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Approve Match</DialogTitle>

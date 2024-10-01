@@ -1,6 +1,5 @@
-import React from 'react';
-import { TextField, Button } from '@mui/material';
-
+import React from "react";
+import { TextField, Button } from "@mui/material";
 
 interface OrderTransactionFormProps {
   orders: string;
@@ -10,7 +9,13 @@ interface OrderTransactionFormProps {
   setTransactions: (value: string) => void;
 }
 
-const OrderTransactionForm: React.FC<OrderTransactionFormProps> = ({ orders, transactions, setOrders, setTransactions, handleMatchTransactions }) => {
+const OrderTransactionForm: React.FC<OrderTransactionFormProps> = ({
+  orders,
+  transactions,
+  setOrders,
+  setTransactions,
+  handleMatchTransactions,
+}) => {
   return (
     <>
       <TextField
@@ -21,7 +26,7 @@ const OrderTransactionForm: React.FC<OrderTransactionFormProps> = ({ orders, tra
         onChange={(e) => setOrders(e.target.value)}
         multiline
         rows={4}
-        sx={{ width: '80%', maxHeight: '50%' }}
+        sx={{ width: "80%", maxHeight: "50%" }}
       />
 
       <TextField
@@ -32,13 +37,13 @@ const OrderTransactionForm: React.FC<OrderTransactionFormProps> = ({ orders, tra
         onChange={(e) => setTransactions(e.target.value)}
         multiline
         rows={4}
-        sx={{ width: '80%', maxHeight: '50%' }}
+        sx={{ width: "80%", maxHeight: "50%" }}
       />
-       <Button
+      <Button
         variant="contained"
         color="primary"
         onClick={handleMatchTransactions}
-        style={{ marginTop: '20px', width: '200px' }}
+        style={{ marginTop: "20px", width: "200px" }}
       >
         Match Transactions
       </Button>

@@ -18,11 +18,10 @@ class ApiHelper {
     }
   }
 
-
   static async getOrderTransactions(ordersId: string[]) {
     try {
       const url = `${ApiHelper.backend_url}/order/transactions`;
-      const data = { ordersId:ordersId };
+      const data = { ordersId: ordersId };
       return await ApiHelper.callApi(url, "POST", data);
     } catch (error) {
       console.error("Error fetching quiz session participants:", error);
@@ -33,7 +32,7 @@ class ApiHelper {
   static async deleteOrderTransactions(ordersId: string[]) {
     try {
       const url = `${ApiHelper.backend_url}/order/transactions`;
-      const data = { ordersId:ordersId };
+      const data = { ordersId: ordersId };
       return await ApiHelper.callApi(url, "DELETE", data);
     } catch (error) {
       console.error("Error fetching quiz session participants:", error);
@@ -55,7 +54,7 @@ class ApiHelper {
   static async createMatchTransactions(dataInput: any[]) {
     try {
       const url = `${ApiHelper.backend_url}/match/transactions/create`;
-      const data = { data:dataInput };
+      const data = { data: dataInput };
       return await ApiHelper.callApi(url, "POST", data);
     } catch (error) {
       console.error("Error matching transactions:", error);
@@ -63,7 +62,6 @@ class ApiHelper {
     }
   }
 
-  
   static async updateMatchTransactionsPreference(matchUpdateData: {
     customerName?: string;
     orderId?: string;
