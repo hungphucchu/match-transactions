@@ -21,20 +21,15 @@ export class MatchRecordService {
     orders: CreateOrderRequest[],
     transactions: CreateTransactionRequest[],
   ) {
-    try {
-      const matchRecords =
-        this.matchTransactionService.matchOrdersAndTransactions(
-          orders,
-          transactions,
-        );
-      return {
-        success: true,
-        data: matchRecords,
-      };
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
+    const matchRecords =
+      this.matchTransactionService.matchOrdersAndTransactions(
+        orders,
+        transactions,
+      );
+    return {
+      success: true,
+      data: matchRecords,
+    };
   }
 
   updateMatchPreference(

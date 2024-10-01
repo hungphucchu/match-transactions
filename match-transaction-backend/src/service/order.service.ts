@@ -90,14 +90,9 @@ export class OrderService {
       if (!existOrder)
         throw new BadRequestException(`Order ${orderId} not exists!`);
 
-      console.log('existOrder.transactions = ');
-      console.log(existOrder.transactions);
-
       if (existOrder.transactions.length > 0) {
         const transactionPromises = existOrder.transactions.map(
           async (transaction) => {
-            console.log('transaction = ');
-            console.log(transaction);
             return await this.transactionService.deleteTransaction({
               where: { transaction_id: transaction.transaction_id },
             });

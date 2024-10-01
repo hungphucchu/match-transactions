@@ -24,7 +24,7 @@ class ApiHelper {
       const data = { ordersId: ordersId };
       return await ApiHelper.callApi(url, "POST", data);
     } catch (error) {
-      console.error("Error fetching quiz session participants:", error);
+      console.error("Error getting order transactions:", error);
       throw error;
     }
   }
@@ -35,7 +35,7 @@ class ApiHelper {
       const data = { ordersId: ordersId };
       return await ApiHelper.callApi(url, "DELETE", data);
     } catch (error) {
-      console.error("Error fetching quiz session participants:", error);
+      console.error("Error deleting order transactions:", error);
       throw error;
     }
   }
@@ -57,7 +57,7 @@ class ApiHelper {
       const data = { data: dataInput };
       return await ApiHelper.callApi(url, "POST", data);
     } catch (error) {
-      console.error("Error matching transactions:", error);
+      console.error("Error creating match transactions:", error);
       throw error;
     }
   }
@@ -72,7 +72,7 @@ class ApiHelper {
       const data = matchUpdateData;
       return await ApiHelper.callApi(url, "POST", data);
     } catch (error) {
-      console.error("Error updating match transactions:", error);
+      console.error("Error updating match transactions preference:", error);
       throw error;
     }
   }

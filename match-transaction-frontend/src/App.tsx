@@ -85,7 +85,7 @@ const App: React.FC = () => {
     } else if (createOrders) {
       createMatchTransactions();
     }
-  }, [approveDialogOpen, orderIds, deleteOrders, createOrders]);
+  }, [approveDialogOpen, orderIds, deleteOrders, createOrders, matchResult]);
 
   const handleMatchTransactions = async () => {
     try {
