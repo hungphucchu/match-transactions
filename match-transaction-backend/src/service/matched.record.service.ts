@@ -29,19 +29,14 @@ export class MatchRecordService {
     }
   }
 
-  async updateMatchTransactionRecords(updateMatchedRecordRequest: UpdateMatchedRecordRequest) {
-    try {
-      this.matchTransactionService.updateMatchPreference(updateMatchedRecordRequest);
-      
-      return {
-        success: true,
-        data: "Successfully Update the match transactions",
-      };
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  }
+  updateMatchTransactionRecords(updateMatchedRecordRequest: UpdateMatchedRecordRequest) {
+    this.matchTransactionService.updateMatchPreference(updateMatchedRecordRequest);
+    
+    return {
+      success: true,
+      data: "Successfully Update the match transactions",
+    };
+  } 
 
   async createMatchTransactionRecords(createMatchedRecordRequest: CreateMatchedRecordRequest) {
       const orderPromises = createMatchedRecordRequest.data.map(async (matchTransactionItem) => {

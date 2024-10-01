@@ -6,9 +6,10 @@ import { TransactionModule } from './transaction.module';
 import { OrderModule } from './order.module';
 import { MySqlClient } from 'src/dao/prisma/client/mysql.client';
 import { LogService } from 'src/service/log.service';
+import { ConfigService } from 'src/config/config.service';
 @Module({
   imports: [TransactionModule, OrderModule],
   controllers: [MatchedRecordController],
-  providers: [MatchRecordService, MatchTransactionService,MySqlClient, LogService],
+  providers: [MatchRecordService, MatchTransactionService,MySqlClient, LogService, ConfigService],
 })
 export class MatchedRecordModule {}

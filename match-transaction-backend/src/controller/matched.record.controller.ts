@@ -13,13 +13,13 @@ export class MatchedRecordController {
   @ApiResponse({ status: 200, description: 'Successfully create quizzes.' })
   async matchTransactions(@Body() body: MatchedRecordRequest) {
     const {orders, transactions} = body;
-    return this.matchRecordService.matchTransactionRecords(orders, transactions);
+    return await this.matchRecordService.matchTransactionRecords(orders, transactions);
   }
 
   @Post('transactions/update')
   @ApiOperation({ summary: 'Retrieve all quizzes' })
   @ApiResponse({ status: 200, description: 'Successfully retrieved quizzes.' })
-  async updateMatchTransactions(@Body() body: UpdateMatchedRecordRequest) {
+  updateMatchTransactions(@Body() body: UpdateMatchedRecordRequest) {
     return this.matchRecordService.updateMatchTransactionRecords(body);
   }
 
@@ -27,6 +27,6 @@ export class MatchedRecordController {
   @ApiOperation({ summary: 'Create quizzes' })
   @ApiResponse({ status: 200, description: 'Successfully create quizzes.' })
   async createMatchTransactions(@Body() body: CreateMatchedRecordRequest) {
-    return this.matchRecordService.createMatchTransactionRecords(body);
+    return await this.matchRecordService.createMatchTransactionRecords(body);
   }
 }
