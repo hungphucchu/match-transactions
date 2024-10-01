@@ -1,0 +1,11 @@
+{
+    "devDependencies": {
+      "concurrently": "^8.2.2"
+    },
+    "scripts": {
+      "start:match-transaction": "concurrently \"npm run backend\" \"npm run frontend\"",
+      "backend": "cd match-transaction-backend && npm run start:backend",
+      "frontend": "cd match-transaction-frontend && npm run start:frontend"
+    }
+  }
+  

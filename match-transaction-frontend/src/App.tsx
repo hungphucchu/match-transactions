@@ -89,6 +89,10 @@ const App: React.FC = () => {
 
   const handleMatchTransactions = async () => {
     try {
+      if (orders.length === 0 || transactions.length === 0) {
+        message.error("Please enter orders or transactions");
+        return;
+      }
       const ordersArray = JSON.parse(orders);
       const transactionsArray = JSON.parse(transactions);
       const response = await ApiHelper.matchTransactions(
