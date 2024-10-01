@@ -44,14 +44,6 @@ export class OrderService {
     };
   }
 
-  async getOrders() {
-    const orders: any = await this.orderRepository.findAll();
-    return {
-      success: true,
-      data: orders,
-    };
-  }
-
   async getOrdersTransaction(body: GetOrderRequest) {
     const searchData: any = {
       include: {

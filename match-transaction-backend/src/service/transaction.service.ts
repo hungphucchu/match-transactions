@@ -60,14 +60,6 @@ export class TransactionService {
     };
   }
 
-  async getTransactions() {
-    const transactions = await this.transactionRepository.findAll();
-    return {
-      success: true,
-      data: transactions,
-    };
-  }
-
   async deleteTransaction(data: any) {
     return await this.transactionRepository.delete(data);
   }

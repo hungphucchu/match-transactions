@@ -88,7 +88,6 @@ export class MatchTransactionService {
     return charOverlapScore;
   }
 
-  // Calculate similarity between two strings
   private calculateStringSimilarity(
     key: string,
     str1: string,
@@ -96,7 +95,6 @@ export class MatchTransactionService {
   ): number {
     this.logService.log(`Comparing "${str1}" with "${str2}"`);
 
-    // Exact match
     if (str1 === str2) {
       return 100;
     }
@@ -115,7 +113,6 @@ export class MatchTransactionService {
     return Math.max(tokenOverlapScore, charOverlapScore);
   }
 
-  // Compare tokens based on character similarity
   private calculateWordSimilarity(word1: string, word2: string): number {
     let commonChars = 0;
     const maxLength = Math.max(word1.length, word2.length);
@@ -129,7 +126,6 @@ export class MatchTransactionService {
     return (commonChars / maxLength) * 100;
   }
 
-  // Calculate the match score between an order and a transaction
   private calculateMatchScore(order: Order, transaction: Transaction): number {
     this.logService.log(
       `Calculating match score for order: ${order.customerName} and transaction: ${transaction.customerName}`,
