@@ -14,7 +14,6 @@ async function bootstrap() {
     new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
   );
 
-
   app.enableCors();
 
   const config = new DocumentBuilder()
@@ -24,7 +23,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  console.log(portNumber)
   await app.listen(portNumber);
 }
 

@@ -8,6 +8,6 @@ import { TransactionModule } from './transaction.module';
   imports: [TransactionModule],
   controllers: [OrderController],
   providers: [OrderService, OrderRepository, MySqlClient],
-  exports: [OrderService], 
+  exports: [OrderService],
 })
 export class OrderModule {}

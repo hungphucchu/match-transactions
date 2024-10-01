@@ -8,18 +8,20 @@ import { CreateTransactionRequest } from 'src/dto/transaction.dto';
 export class TransactionService {
   constructor(
     private transactionRepository: TransactionRepository,
-    private orderRepository: OrderRepository
+    private orderRepository: OrderRepository,
   ) {}
 
-  async createTransaction(orderUuid: string, newTransactionRequest: CreateTransactionRequest) {
-    
+  async createTransaction(
+    orderUuid: string,
+    newTransactionRequest: CreateTransactionRequest,
+  ) {
     const existingOrder: Order = await this.orderRepository.findUnique({
       where: { order_uuid: orderUuid },
     });
 
     if (!existingOrder) {
       throw new BadRequestException(
-        `Order with UUID ${newTransactionRequest.orderId} does not exist!`
+        `Order with UUID ${newTransactionRequest.orderId} does not exist!`,
       );
     }
 
@@ -36,15 +38,16 @@ export class TransactionService {
       throw new BadRequestException(`Transaction already exists!`);
     }
 
-    
-    const newTransaction: Transaction = await this.transactionRepository.create({
-      data: {
-        ...newTransactionRequest,
-        order_id: existingOrder.order_id, 
-        date: new Date(newTransactionRequest.date),
-        transactionDate: new Date(newTransactionRequest.transactionDate),
+    const newTransaction: Transaction = await this.transactionRepository.create(
+      {
+        data: {
+          ...newTransactionRequest,
+          order_id: existingOrder.order_id,
+          date: new Date(newTransactionRequest.date),
+          transactionDate: new Date(newTransactionRequest.transactionDate),
+        },
       },
-    });
+    );
 
     return {
       success: true,
@@ -67,7 +70,5 @@ export class TransactionService {
 
   async deleteTransaction(data: any) {
     return await this.transactionRepository.delete(data);
-   
   }
-  
 }

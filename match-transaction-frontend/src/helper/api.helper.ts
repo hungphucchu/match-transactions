@@ -18,32 +18,6 @@ class ApiHelper {
     }
   }
 
-  static async getUsers() {
-    try {
-      const url = `${ApiHelper.backend_url}/user`;
-      return await ApiHelper.callApi(url);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      throw error;
-    }
-  }
-
-  static async createUser(userName: {
-    username: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-  }) {
-    try {
-      const url = `${ApiHelper.backend_url}/user/create`;
-      const data = userName;
-      return await ApiHelper.callApi(url, "POST", data);
-    } catch (error) {
-      console.error("Error creating user:", error);
-      throw error;
-    }
-  }
-
 
   static async getOrderTransactions(ordersId: string[]) {
     try {
@@ -90,13 +64,13 @@ class ApiHelper {
   }
 
   
-  static async updateMatchTransactions(matchUpdateData: {
+  static async updateMatchTransactionsPreference(matchUpdateData: {
     customerName?: string;
     orderId?: string;
     product?: string;
   }) {
     try {
-      const url = `${ApiHelper.backend_url}/match/transactions/update`;
+      const url = `${ApiHelper.backend_url}/match/transactions/preferences`;
       const data = matchUpdateData;
       return await ApiHelper.callApi(url, "POST", data);
     } catch (error) {

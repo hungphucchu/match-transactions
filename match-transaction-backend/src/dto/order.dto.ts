@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsNumber, IsDateString, IsOptional, IsArray } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsDateString,
+  IsOptional,
+  IsArray,
+} from 'class-validator';
 
 export class CreateOrderRequest {
   @ApiProperty({ description: 'The type of the order' })
@@ -36,10 +43,6 @@ export class GetOrderRequest {
   @IsOptional()
   @IsArray()
   ordersId?: string[];
-
 }
 
-export class DeleteOrderRequest extends GetOrderRequest {
- 
-
-}
+export class DeleteOrderRequest extends GetOrderRequest {}

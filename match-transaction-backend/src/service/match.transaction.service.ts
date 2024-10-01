@@ -1,45 +1,53 @@
 import { Injectable } from '@nestjs/common';
 import { CompositeKey } from 'src/dto/composite.key';
-import { MatchType, UpdateMatchedRecordRequest } from 'src/dto/matched.record.dto';
-import { MatchedRecord, Order, Transaction } from 'src/interface/common.interface';
-import { LogService } from './log.service'; 
+import {
+  MatchType,
+  UpdateMatchedRecordRequest,
+} from 'src/dto/matched.record.dto';
+import {
+  MatchedRecord,
+  Order,
+  Transaction,
+} from 'src/interface/common.interface';
+import { LogService } from './log.service';
 import { ConfigService } from 'src/config/config.service';
 
 @Injectable()
 export class MatchTransactionService {
-  private matches: Record<string, MatchType>;
+  private matchPreferences: Record<string, MatchType>;
   private similarCharsMap: Record<string, string[]>;
 
   constructor(
-    private readonly logService: LogService, 
-    private readonly configService: ConfigService 
+    private readonly logService: LogService,
+    private readonly configService: ConfigService,
   ) {
-    this.matches = this.configService.matches;
+    this.matchPreferences = this.configService.matchPreferences;
     this.similarCharsMap = this.configService.similarCharsMap;
   }
 
-
-  updateMatchPreference(updateMatchedRecordRequest: UpdateMatchedRecordRequest) {
+  updateMatchPreference(
+    updateMatchedRecordRequest: UpdateMatchedRecordRequest,
+  ) {
     const { customerName, orderId, product } = updateMatchedRecordRequest;
 
     if (customerName) {
-      this.matches.customerName = customerName; 
+      this.matchPreferences.customerName = customerName;
     }
 
     if (orderId) {
-      this.matches.orderId = orderId; 
+      this.matchPreferences.orderId = orderId;
     }
 
     if (product) {
-      this.matches.product = product;
+      this.matchPreferences.product = product;
     }
 
-    this.logService.log(JSON.stringify(this.matches));
+    this.logService.log(JSON.stringify(this.matchPreferences));
   }
 
   private areSimilarChars(char1: string, char2: string): boolean {
-    if (char1 === char2) return true; 
-    return this.similarCharsMap[char1]?.includes(char2) ?? false; 
+    if (char1 === char2) return true;
+    return this.similarCharsMap[char1]?.includes(char2) ?? false;
   }
 
   private wordCompareScore(str1: string, str2: string): number {
@@ -49,9 +57,12 @@ export class MatchTransactionService {
     let commonWords = 0;
     const maxWord = Math.max(words1.length, words2.length);
 
-    words1.forEach(word1 => {
-      words2.forEach(word2 => {
-        if (this.areSimilarChars(word1, word2) || this.calculateWordSimilarity(word1, word2) > 50) {
+    words1.forEach((word1) => {
+      words2.forEach((word2) => {
+        if (
+          this.areSimilarChars(word1, word2) ||
+          this.calculateWordSimilarity(word1, word2) > 50
+        ) {
           commonWords++;
         }
       });
@@ -62,8 +73,7 @@ export class MatchTransactionService {
     return tokenOverlapScore;
   }
 
-  private charCompareScore(str1: string, str2: string):number{
-
+  private charCompareScore(str1: string, str2: string): number {
     let commonChars = 0;
     const maxLength = Math.max(str1.length, str2.length);
 
@@ -79,19 +89,23 @@ export class MatchTransactionService {
   }
 
   // Calculate similarity between two strings
-  private calculateStringSimilarity(key: string, str1: string, str2: string): number {
+  private calculateStringSimilarity(
+    key: string,
+    str1: string,
+    str2: string,
+  ): number {
     this.logService.log(`Comparing "${str1}" with "${str2}"`);
 
     // Exact match
     if (str1 === str2) {
-      return 100; 
+      return 100;
     }
 
     // if match type is full match then return 0 score
-    if (this.matches[key] === MatchType.FULL_MATCH) {
+    if (this.matchPreferences[key] === MatchType.FULL_MATCH) {
       return 0;
     }
-    
+
     const tokenOverlapScore = this.wordCompareScore(str1, str2);
 
     if (tokenOverlapScore > 50) return tokenOverlapScore;
@@ -117,29 +131,48 @@ export class MatchTransactionService {
 
   // Calculate the match score between an order and a transaction
   private calculateMatchScore(order: Order, transaction: Transaction): number {
-    this.logService.log(`Calculating match score for order: ${order.customerName} and transaction: ${transaction.customerName}`);
+    this.logService.log(
+      `Calculating match score for order: ${order.customerName} and transaction: ${transaction.customerName}`,
+    );
 
-    const nameScore = this.calculateStringSimilarity("customerName", order.customerName, transaction.customerName);
-    const idScore = this.calculateStringSimilarity("orderId", order.orderId, transaction.orderId);
-    const productScore = this.calculateStringSimilarity("product", order.product, transaction.product);
+    const nameScore = this.calculateStringSimilarity(
+      'customerName',
+      order.customerName,
+      transaction.customerName,
+    );
+    const idScore = this.calculateStringSimilarity(
+      'orderId',
+      order.orderId,
+      transaction.orderId,
+    );
+    const productScore = this.calculateStringSimilarity(
+      'product',
+      order.product,
+      transaction.product,
+    );
 
-    const totalScore = (nameScore * 0.33) + (idScore * 0.33) + (productScore * 0.33);
-    this.logService.log(`Name score: ${nameScore}, ID score: ${idScore}, Product score: ${productScore}`);
+    const totalScore = nameScore * 0.33 + idScore * 0.33 + productScore * 0.33;
+    this.logService.log(
+      `Name score: ${nameScore}, ID score: ${idScore}, Product score: ${productScore}`,
+    );
     this.logService.log(`Total score: ${totalScore}`);
     return totalScore;
   }
 
-
   matchOrdersAndTransactions(
     orders: Order[],
     transactions: Transaction[],
-    similarityThreshold: number = 70
+    similarityThreshold: number = 70,
   ): MatchedRecord[] {
     const transactionMap = new Map<string, Transaction[]>();
 
     transactions.forEach((txn) => {
       const key = new CompositeKey(
-        txn.customerName, txn.orderId, txn.date, txn.product, txn.price
+        txn.customerName,
+        txn.orderId,
+        txn.date,
+        txn.product,
+        txn.price,
       ).hashCode();
 
       if (!transactionMap.has(key)) {
@@ -150,13 +183,19 @@ export class MatchTransactionService {
 
     return orders.map((order) => {
       const orderKey = new CompositeKey(
-        order.customerName, order.orderId, order.date, order.product, order.price
+        order.customerName,
+        order.orderId,
+        order.date,
+        order.product,
+        order.price,
       ).hashCode();
 
       const exactMatches = transactionMap.get(orderKey) || [];
 
       if (exactMatches.length > 0) {
-        this.logService.log(`Exact matches found for order: ${order.customerName}, ID: ${order.orderId}`);
+        this.logService.log(
+          `Exact matches found for order: ${order.customerName}, ID: ${order.orderId}`,
+        );
         return {
           order,
           transactions: exactMatches,

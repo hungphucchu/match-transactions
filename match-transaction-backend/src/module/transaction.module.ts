@@ -6,7 +6,12 @@ import { TransactionService } from 'src/service/transaction.service';
 @Module({
   imports: [],
   controllers: [],
-  providers: [TransactionService, TransactionRepository,OrderRepository ,MySqlClient],
-  exports: [TransactionService], 
+  providers: [
+    TransactionService,
+    TransactionRepository,
+    OrderRepository,
+    MySqlClient,
+  ],
+  exports: [TransactionService],
 })
 export class TransactionModule {}

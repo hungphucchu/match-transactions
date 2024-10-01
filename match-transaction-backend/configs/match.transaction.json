@@ -1,5 +1,5 @@
 {
-    "matches": {
+    "matchPreferences": {
       "customerName": "PARTIAL_MATCH",
       "orderId": "PARTIAL_MATCH",
       "product": "PARTIAL_MATCH"

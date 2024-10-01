@@ -1,13 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsUUID, IsNumber, IsDateString, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsDateString,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateTransactionRequest {
-  @ApiProperty({ description: 'The type of the transaction, e.g. payment, refund' })
+  @ApiProperty({
+    description: 'The type of the transaction, e.g. payment, refund',
+  })
   @IsOptional()
   @IsString()
   type?: string;
 
-  @ApiProperty({ description: 'The name of the customer associated with the transaction' })
+  @ApiProperty({
+    description: 'The name of the customer associated with the transaction',
+  })
   @IsString()
   customerName: string;
 
@@ -19,15 +28,22 @@ export class CreateTransactionRequest {
   @IsDateString()
   date: string;
 
-  @ApiProperty({ description: 'The name of the product related to the transaction' })
+  @ApiProperty({
+    description: 'The name of the product related to the transaction',
+  })
   @IsString()
   product: string;
 
-  @ApiProperty({ description: 'The price of the product related to the transaction' })
+  @ApiProperty({
+    description: 'The price of the product related to the transaction',
+  })
   @IsNumber()
   price: number;
 
-  @ApiProperty({ description: 'The specific type of the transaction, such as paymentReceived, refundIssued' })
+  @ApiProperty({
+    description:
+      'The specific type of the transaction, such as paymentReceived, refundIssued',
+  })
   @IsString()
   transactionType: string;
 

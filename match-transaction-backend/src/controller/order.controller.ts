@@ -1,6 +1,5 @@
-import { Controller, Post, Body, Get, Delete} from '@nestjs/common';
+import { Controller, Post, Body, Delete } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateMatchedRecordRequest, MatchedRecordRequest, UpdateMatchedRecordRequest } from 'src/dto/matched.record.dto';
 import { GetOrderRequest } from 'src/dto/order.dto';
 import { OrderService } from 'src/service/order.service';
 
@@ -10,17 +9,22 @@ export class OrderController {
   constructor(private orderService: OrderService) {}
 
   @Post('transactions')
-  @ApiOperation({ summary: 'Create quizzes' })
-  @ApiResponse({ status: 200, description: 'Successfully create quizzes.' })
+  @ApiOperation({ summary: 'Get order transactions' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully get order transactions',
+  })
   async getOrders(@Body() body: GetOrderRequest) {
     return await this.orderService.getOrdersTransaction(body);
   }
 
   @Delete('transactions')
-  @ApiOperation({ summary: 'Create quizzes' })
-  @ApiResponse({ status: 200, description: 'Successfully create quizzes.' })
+  @ApiOperation({ summary: 'Delete order transactions' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully delete order transactions.',
+  })
   async deleteOrdersTransaction(@Body() body: GetOrderRequest) {
     return await this.orderService.deleteOrdersTransaction(body);
   }
-
 }

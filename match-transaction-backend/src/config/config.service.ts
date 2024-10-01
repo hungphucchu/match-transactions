@@ -4,7 +4,11 @@ import { join } from 'path';
 
 @Injectable()
 export class ConfigService {
-  private configFilePath = join(process.cwd(), 'configs', 'match.transaction.json');
+  private configFilePath = join(
+    process.cwd(),
+    'configs',
+    'match.transaction.json',
+  );
   private config: any;
 
   constructor() {
@@ -22,18 +26,21 @@ export class ConfigService {
 
   private saveConfig() {
     try {
-      writeFileSync(this.configFilePath, JSON.stringify(this.config, null, 2), 'utf-8');
+      writeFileSync(
+        this.configFilePath,
+        JSON.stringify(this.config, null, 2),
+        'utf-8',
+      );
     } catch (error) {
       throw new Error(`Could not save configuration file: ${error.message}`);
     }
   }
 
-  get matches() {
-    return this.config.matches;
+  get matchPreferences() {
+    return this.config.matchPreferences;
   }
 
   get similarCharsMap() {
     return this.config.similarCharsMap;
   }
-
 }

@@ -1,10 +1,11 @@
-import {
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MatchTransactionService } from './match.transaction.service';
 import { CreateTransactionRequest } from 'src/dto/transaction.dto';
 import { CreateOrderRequest } from 'src/dto/order.dto';
-import { CreateMatchedRecordRequest, UpdateMatchedRecordRequest } from 'src/dto/matched.record.dto';
+import {
+  CreateMatchedRecordRequest,
+  UpdateMatchedRecordRequest,
+} from 'src/dto/matched.record.dto';
 import { OrderService } from './order.service';
 import { TransactionService } from './transaction.service';
 
@@ -16,9 +17,16 @@ export class MatchRecordService {
     private transactionService: TransactionService,
   ) {}
 
-  async matchTransactionRecords(orders: CreateOrderRequest[], transactions: CreateTransactionRequest[]) {
+  async matchTransactionRecords(
+    orders: CreateOrderRequest[],
+    transactions: CreateTransactionRequest[],
+  ) {
     try {
-      const matchRecords = this.matchTransactionService.matchOrdersAndTransactions(orders,transactions);
+      const matchRecords =
+        this.matchTransactionService.matchOrdersAndTransactions(
+          orders,
+          transactions,
+        );
       return {
         success: true,
         data: matchRecords,
@@ -29,20 +37,27 @@ export class MatchRecordService {
     }
   }
 
-  updateMatchTransactionRecords(updateMatchedRecordRequest: UpdateMatchedRecordRequest) {
-    this.matchTransactionService.updateMatchPreference(updateMatchedRecordRequest);
-    
+  updateMatchPreference(
+    updateMatchedRecordRequest: UpdateMatchedRecordRequest,
+  ) {
+    this.matchTransactionService.updateMatchPreference(
+      updateMatchedRecordRequest,
+    );
+
     return {
       success: true,
-      data: "Successfully Update the match transactions",
+      data: 'Successfully Update the match transactions',
     };
-  } 
+  }
 
-  async createMatchTransactionRecords(createMatchedRecordRequest: CreateMatchedRecordRequest) {
-      const orderPromises = createMatchedRecordRequest.data.map(async (matchTransactionItem) => {
+  async createMatchTransactionRecords(
+    createMatchedRecordRequest: CreateMatchedRecordRequest,
+  ) {
+    const orderPromises = createMatchedRecordRequest.data.map(
+      async (matchTransactionItem) => {
         const newOrder = matchTransactionItem.order;
         const { customerName, orderId, date, product, price } = newOrder;
-  
+
         const createNewOrder = await this.orderService.createOrder({
           customerName,
           orderId,
@@ -50,51 +65,47 @@ export class MatchRecordService {
           product,
           price,
         });
-  
+
         if (createNewOrder.success) {
-          const transactionPromises = matchTransactionItem.transactions.map(transaction => {
-            const {
-              customerName,
-              orderId,
-              date,
-              product,
-              price,
-              transactionType,
-              transactionDate,
-              transactionAmount,
-            } = transaction;
-  
-           
-            return this.transactionService.createTransaction(createNewOrder.data.order_uuid, {
-              customerName,
-              orderId,
-              date,
-              product,
-              price,
-              transactionType,
-              transactionDate,
-              transactionAmount,
-            });
-          });
-  
-          
+          const transactionPromises = matchTransactionItem.transactions.map(
+            (transaction) => {
+              const {
+                customerName,
+                orderId,
+                date,
+                product,
+                price,
+                transactionType,
+                transactionDate,
+                transactionAmount,
+              } = transaction;
+
+              return this.transactionService.createTransaction(
+                createNewOrder.data.order_uuid,
+                {
+                  customerName,
+                  orderId,
+                  date,
+                  product,
+                  price,
+                  transactionType,
+                  transactionDate,
+                  transactionAmount,
+                },
+              );
+            },
+          );
+
           return Promise.all(transactionPromises);
         }
-      });
-  
-      
-      await Promise.all(orderPromises);
-  
-      return {
-        success: true,
-        data: createMatchedRecordRequest,
-      };
-    
+      },
+    );
+
+    await Promise.all(orderPromises);
+
+    return {
+      success: true,
+      data: createMatchedRecordRequest,
+    };
   }
-  
-
-  
-
 }
-
-

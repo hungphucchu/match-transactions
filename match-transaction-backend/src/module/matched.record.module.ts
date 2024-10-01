@@ -10,6 +10,12 @@ import { ConfigService } from 'src/config/config.service';
 @Module({
   imports: [TransactionModule, OrderModule],
   controllers: [MatchedRecordController],
-  providers: [MatchRecordService, MatchTransactionService,MySqlClient, LogService, ConfigService],
+  providers: [
+    MatchRecordService,
+    MatchTransactionService,
+    MySqlClient,
+    LogService,
+    ConfigService,
+  ],
 })
 export class MatchedRecordModule {}

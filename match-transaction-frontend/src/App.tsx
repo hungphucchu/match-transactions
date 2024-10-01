@@ -64,11 +64,11 @@ const App: React.FC = () => {
         try {
             
             const response = await ApiHelper.createMatchTransactions(matchResult);
-            if (response.success) message.success('Match Transactions created successfully!');
+            if (response.success) message.success('Match transactions created successfully!');
             setApproveDialogOpen(false);
         } catch (error: any) {
-          if (error?.response?.status === 400) message.warning("Already create this Match Transactions!");
-          else message.error('Failed to create Match Transactions');
+          if (error?.response?.status === 400) message.warning("Already create this match transactions!");
+          else message.error('Failed to create match transactions!');
         }
         }
     }
@@ -92,10 +92,10 @@ const App: React.FC = () => {
       if (response.success){
         setMatchResult(response?.data || []);
         if (ordersArray.length > 0) setOrderIds(ordersArray.map((order: any) => order.orderId));
-        message.success('Match Transactions fetched successfully!');
+        message.success('Completing matching orders and transactions!');
       }
     } catch (error) {
-      message.error('Failed to fetch Match Transactions');
+      message.error('Failed to match orders and transactions!');
     }
   };
 
@@ -112,12 +112,12 @@ const App: React.FC = () => {
 
   const handleRejectSubmit = async () => {
     try {
-      await ApiHelper.updateMatchTransactions(matchType);
-      message.success('Match Transaction updated successfully!');
+      await ApiHelper.updateMatchTransactionsPreference(matchType);
+      message.success('Match transaction preference updated successfully!');
       setDeleteOrders(true);
       setRejectDialogOpen(false);
     } catch (error) {
-      message.error('Failed to update Match Transaction');
+      message.error('Failed to update match transaction preference!');
     }
   };
 
@@ -166,17 +166,17 @@ const App: React.FC = () => {
         </>
       ) : (
         <>
-          {/* Show Order Transactions List */}
+         
           <OrderTransactionList orderTransactions={orderTransactions} />
 
-          {/* Button to switch back to form view */}
+         
           <Button
             variant="contained"
             color="primary"
             onClick={handleLetsMatchClick}
             style={{ marginTop: '20px' }}
           >
-            Let's Match
+            Let's Match Order Transactions
           </Button>
         </>
       )}

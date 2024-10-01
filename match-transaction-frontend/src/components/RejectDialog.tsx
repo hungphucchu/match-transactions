@@ -12,7 +12,7 @@ interface RejectDialogProps {
 const RejectDialog: React.FC<RejectDialogProps> = ({ open, onClose, onSubmit, matchType, handleSelectChange }) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Reject Match</DialogTitle>
+      <DialogTitle>Update Match Preferences</DialogTitle>
       <DialogContent>
         <div>
           <FormLabel component="legend">Customer Name</FormLabel>
