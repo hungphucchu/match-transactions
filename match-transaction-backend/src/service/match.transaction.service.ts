@@ -68,9 +68,9 @@ export class MatchTransactionService {
       });
     });
 
-    const tokenOverlapScore = (commonWords / maxWord) * 100;
-    this.logService.log(`Token overlap score: ${tokenOverlapScore}`);
-    return tokenOverlapScore;
+    const wordOverlapScore = (commonWords / maxWord) * 100;
+    this.logService.log(`Word overlap score: ${wordOverlapScore}`);
+    return wordOverlapScore;
   }
 
   private charCompareScore(str1: string, str2: string): number {
@@ -104,13 +104,13 @@ export class MatchTransactionService {
       return 0;
     }
 
-    const tokenOverlapScore = this.wordCompareScore(str1, str2);
+    const wordOverlapScore = this.wordCompareScore(str1, str2);
 
-    if (tokenOverlapScore > 50) return tokenOverlapScore;
+    if (wordOverlapScore > 50) return wordOverlapScore;
 
     const charOverlapScore = this.charCompareScore(str1, str2);
 
-    return Math.max(tokenOverlapScore, charOverlapScore);
+    return Math.max(wordOverlapScore, charOverlapScore);
   }
 
   private calculateWordSimilarity(word1: string, word2: string): number {
