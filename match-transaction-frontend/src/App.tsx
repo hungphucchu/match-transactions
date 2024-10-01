@@ -12,7 +12,10 @@ const App: React.FC = () => {
   const [orders, setOrders] = useState('');
   const [transactions, setTransactions] = useState('');
   const [orderTransactions, setOrderTransactions] = useState<any[]>([]);
+  const [orderIds, setOrderIds] = useState<any[]>([]);
   const [matchResult, setMatchResult] = useState<any[]>([]);
+  const [deleteOrders, setDeleteOrders] = useState(false);
+  const [createOrders, setCreateOrders] = useState(false);
   const [approveDialogOpen, setApproveDialogOpen] = useState(false);
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [matchType, setMatchType] = useState({
@@ -23,28 +26,72 @@ const App: React.FC = () => {
   const [showOrderTransactions, setShowOrderTransactions] = useState(false); 
 
   useEffect(() => {
-    const fetchOrderTransactions = async () => {
+    const getOrderTransactions = async () => {
       try {
-        const response = await ApiHelper.getOrderTransactions();
+        const response = await ApiHelper.getOrderTransactions(orderIds);
+        return response;
+      } catch (error) {
+        message.error('Failed to get Order Transactions');
+      }
+
+    }
+    const fetchOrderTransactions = async () => {
+        const response = await getOrderTransactions();
         if (response.success){
           setOrderTransactions(response?.data || []);
           message.success('Order Transactions fetched successfully!');
         }
+    };
+    const deleteOrderTransactions = async () => {
+      try {
+        const orderTransactionsresponse = await getOrderTransactions();
+        if (orderTransactionsresponse.success && orderTransactionsresponse.data.length > 0){
+          const response = await ApiHelper.deleteOrderTransactions(orderIds);
+          if (response.success){
+            message.success('Order Transactions deleted successfully!');
+          }
+          setDeleteOrders(false);
+        }
+        
       } catch (error) {
-        message.error('Failed to fetch Order Transactions');
+        message.error('Failed to delete Order Transactions');
       }
     };
 
+    const createMatchTransactions = async () => {
+      const orderTransactionsresponse = await getOrderTransactions();
+      if (orderTransactionsresponse.success && orderTransactionsresponse.data.length === 0){
+        try {
+            
+            const response = await ApiHelper.createMatchTransactions(matchResult);
+            if (response.success) message.success('Match Transactions created successfully!');
+            setApproveDialogOpen(false);
+        } catch (error: any) {
+          if (error?.response?.status === 400) message.warning("Already create this Match Transactions!");
+          else message.error('Failed to create Match Transactions');
+        }
+        }
+    }
+
     if (approveDialogOpen) {
       fetchOrderTransactions();
+    }else if(deleteOrders){
+      deleteOrderTransactions();
+    }else if (createOrders){
+      createMatchTransactions()
     }
-  }, [approveDialogOpen]);
+  }, [approveDialogOpen, orderIds, deleteOrders, createOrders]);
+
+  
 
   const handleMatchTransactions = async () => {
     try {
-      const response = await ApiHelper.matchTransactions(JSON.parse(orders), JSON.parse(transactions));
+      const ordersArray = JSON.parse(orders);
+      const transactionsArray = JSON.parse(transactions);
+      const response = await ApiHelper.matchTransactions(ordersArray, transactionsArray);
       if (response.success){
         setMatchResult(response?.data || []);
+        if (ordersArray.length > 0) setOrderIds(ordersArray.map((order: any) => order.orderId));
         message.success('Match Transactions fetched successfully!');
       }
     } catch (error) {
@@ -52,18 +99,9 @@ const App: React.FC = () => {
     }
   };
 
-  const createMatchTransactions = async () => {
-    try {
-        const response = await ApiHelper.createMatchTransactions(matchResult);
-        if (response.success) message.success('Match Transactions created successfully!');
-      
-    } catch (error) {
-      message.error('Failed to create Match Transactions');
-    }
-  }
 
   const handleApprove = async () => {
-    if (matchResult.length > 0) await createMatchTransactions();
+    setCreateOrders(true);
     setApproveDialogOpen(true);
   };
 
@@ -76,6 +114,7 @@ const App: React.FC = () => {
     try {
       await ApiHelper.updateMatchTransactions(matchType);
       message.success('Match Transaction updated successfully!');
+      setDeleteOrders(true);
       setRejectDialogOpen(false);
     } catch (error) {
       message.error('Failed to update Match Transaction');

@@ -25,8 +25,8 @@ export class BaseRepository<T> {
     return this.model.create(data);
   }
 
-  async delete(id: string): Promise<T> {
-    return this.model.delete({ where: { id } });
+  async delete(data: any): Promise<T> {
+    return this.model.delete(data);
   }
 
   async count(data: any): Promise<T> {

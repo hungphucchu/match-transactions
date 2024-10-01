@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsNumber, IsDateString, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsDateString, IsOptional, IsArray } from 'class-validator';
 
 export class CreateOrderRequest {
   @ApiProperty({ description: 'The type of the order' })
@@ -29,4 +29,17 @@ export class CreateOrderRequest {
   @ApiProperty({ description: 'The price of the order' })
   @IsNumber()
   price: number;
+}
+
+export class GetOrderRequest {
+  @ApiProperty({ description: 'The type of the order' })
+  @IsOptional()
+  @IsArray()
+  ordersId?: string[];
+
+}
+
+export class DeleteOrderRequest extends GetOrderRequest {
+ 
+
 }

@@ -64,4 +64,10 @@ export class TransactionService {
       data: transactions,
     };
   }
+
+  async deleteTransaction(data: any) {
+    return await this.transactionRepository.delete(data);
+   
+  }
+  
 }

@@ -45,10 +45,22 @@ class ApiHelper {
   }
 
 
-  static async getOrderTransactions() {
+  static async getOrderTransactions(ordersId: string[]) {
     try {
       const url = `${ApiHelper.backend_url}/order/transactions`;
-      return await ApiHelper.callApi(url);
+      const data = { ordersId:ordersId };
+      return await ApiHelper.callApi(url, "POST", data);
+    } catch (error) {
+      console.error("Error fetching quiz session participants:", error);
+      throw error;
+    }
+  }
+
+  static async deleteOrderTransactions(ordersId: string[]) {
+    try {
+      const url = `${ApiHelper.backend_url}/order/transactions`;
+      const data = { ordersId:ordersId };
+      return await ApiHelper.callApi(url, "DELETE", data);
     } catch (error) {
       console.error("Error fetching quiz session participants:", error);
       throw error;

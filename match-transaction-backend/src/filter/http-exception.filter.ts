@@ -10,7 +10,6 @@ import { Response } from 'express';
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
-    console.log("catch excep")
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status =
@@ -22,9 +21,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.message
         : 'Internal Server Error';
-
-        console.log("message = ");
-        console.log(message);
     if (exception?.response && exception?.response.message)
       message = exception?.response.message;
 
